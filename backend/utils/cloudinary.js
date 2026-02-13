@@ -8,9 +8,15 @@ cloudinary.config({
 });
 
 const uploadImage = async (filePath) => {
-  const result = await cloudinary.uploader.upload(filePath);
-  fs.unlinkSync(filePath);
-  return result.secure_url;
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: 'brew-haven/menu'
+    });
+    fs.unlinkSync(filePath);
+    return result.secure_url;
+  } catch (err) {
+    throw new Error('Image upload failed: ' + err.message);
+  }
 };
 
 module.exports = { uploadImage };

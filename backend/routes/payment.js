@@ -6,17 +6,23 @@ const Order = require('../models/Order');
 const router = express.Router();
 
 router.post('/create-payment-intent', protect, async (req, res) => {
-  const { orderId } = req.body;
-  const order = await Order.findById(orderId);
-  if (!order || order.user.toString() !== req.user.id) return res.status(404).json({ message: 'Order not found' });
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order || order.user.toString() !== req.user.id) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: order.totalAmount * 100,
-    currency: 'inr', // changed to INR since you're in Coimbatore
-    metadata: { orderId: order._id.toString() }
-  });
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(order.totalAmount * 100),
+      currency: 'inr',
+      metadata: { orderId: order._id.toString() }
+    });
 
-  res.json({ clientSecret: paymentIntent.client_secret });
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;

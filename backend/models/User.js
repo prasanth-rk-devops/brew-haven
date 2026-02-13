@@ -6,10 +6,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
-  passwordChangedAt: Date,
+  passwordChangedAt: { type: Date },
   twoFactorEnabled: { type: Boolean, default: false },
-  twoFactorSecret: String,
-  backupCodes: [String]
+  twoFactorSecret: { type: String },
+  backupCodes: [{ type: String }]
 }, { timestamps: true });
 
 userSchema.pre('save', async function(next) {
@@ -19,8 +19,8 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-userSchema.methods.matchPassword = async function(entered) {
-  return bcrypt.compare(entered, this.password);
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);

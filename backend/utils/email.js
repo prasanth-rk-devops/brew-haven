@@ -9,31 +9,43 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendOrderConfirmationEmail = async (order, user) => {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: user.email,
-    subject: `Order Confirmation #${order._id}`,
-    html: `<h2>Thank you ${user.name}!</h2><p>Your order of $${order.totalAmount} is confirmed.</p>`
-  });
+  try {
+    await transporter.sendMail({
+      from: `"Brew Haven" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: `Order Confirmation #${order._id}`,
+      text: `Thank you ${user.name} for your order! Total: ₹${order.totalAmount}`
+    });
+  } catch (err) {
+    console.error('Email error:', err);
+  }
 };
 
 const sendAdminNewOrderAlert = async (order, userName) => {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: process.env.ADMIN_EMAILS.split(','),
-    subject: `New Order #${order._id} - $${order.totalAmount}`,
-    html: `<h2>New order from ${userName}</h2><p>Total: $${order.totalAmount}</p>`
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.ADMIN_EMAILS.split(','),
+      subject: `New Order #${order._id}`,
+      text: `New order from ${userName}. Total: ₹${order.totalAmount}`
+    });
+  } catch (err) {
+    console.error('Admin email error:', err);
+  }
 };
 
 const sendPasswordResetEmail = async (email, name, token) => {
   const url = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Reset Your Password',
-    html: `<p>Hello ${name},<br>Click <a href="${url}">here</a> to reset password. Link expires in 15 minutes.</p>`
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Reset Your Password',
+      html: `<p>Hi ${name},<br>Click <a href="${url}">here</a> to reset your password.</p>`
+    });
+  } catch (err) {
+    console.error('Reset email error:', err);
+  }
 };
 
 module.exports = {

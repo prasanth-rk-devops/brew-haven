@@ -12,35 +12,30 @@ const ResetPassword = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!token) {
-      setError('Missing or invalid reset token.');
-    }
+    if (!token) setError('Missing or invalid token');
   }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Passwords do not match');
       return;
     }
 
     try {
-      const { data } = await axios.post('/api/auth/reset-password', {
-        token,
-        newPassword,
-      });
+      const { data } = await axios.post('/api/auth/reset-password', { token, newPassword });
       setMessage(data.message);
       setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to reset password.');
+      setError(err.response?.data?.message || 'Failed to reset');
     }
   };
 
-  if (!token) return <p style={{ color: 'red' }}>{error}</p>;
+  if (!token) return <p style={{ color: 'red', textAlign: 'center', marginTop: '4rem' }}>{error}</p>;
 
   return (
-    <div>
-      <h2>Set New Password</h2>
+    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', background: 'white', borderRadius: '12px' }}>
+      <h2>Reset Password</h2>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!message && (
@@ -54,12 +49,14 @@ const ResetPassword = () => {
           />
           <input
             type="password"
-            placeholder="Confirm New Password"
+            placeholder="Confirm Password"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
             required
           />
-          <button type="submit">Reset Password</button>
+          <button type="submit" style={{ width: '100%', marginTop: '1rem' }}>
+            Reset Password
+          </button>
         </form>
       )}
     </div>

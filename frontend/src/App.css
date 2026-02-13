@@ -1,76 +1,105 @@
 .App {
-  text-align: center;
   min-height: 100vh;
-  background-color: #f8f1e9;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  background: #f8f1e9;
 }
 
 header {
-  background-color: #6f4e37;
+  background: #6f4e37;
   color: white;
   padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-nav a {
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+nav a, nav button {
   color: white;
-  margin: 0 1rem;
   text-decoration: none;
   font-weight: 500;
 }
 
-nav a:hover {
-  text-decoration: underline;
+nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hero {
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.hero h1 {
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
 }
 
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 2rem;
+  padding: 3rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .menu-item {
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .menu-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
 }
 
 .menu-item img {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.menu-item:hover img {
+  transform: scale(1.08);
 }
 
 .item-info {
-  padding: 1rem;
+  padding: 1.2rem;
 }
 
 .price {
   font-weight: bold;
   color: #6f4e37;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
 }
 
 button {
   background: #6f4e37;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.6rem;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
+  font-size: 1rem;
 }
 
 button:hover {
@@ -79,9 +108,9 @@ button:hover {
 
 form {
   max-width: 420px;
-  margin: 3rem auto;
-  background: white;
+  margin: 4rem auto;
   padding: 2rem;
+  background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
@@ -90,98 +119,11 @@ input {
   width: 100%;
   padding: 0.9rem;
   margin: 0.8rem 0;
-  border: 1px solid #ddd;
+  border: 1px solid #d1b9a8;
   border-radius: 6px;
   font-size: 1rem;
 }
 
-.auth-link {
-  margin-top: 1rem;
-  color: #6f4e37;
-  text-decoration: none;
-}
-
-.auth-link:hover {
-  text-decoration: underline;
-}
-
-.qr-container {
-  text-align: center;
-  margin: 2rem 0;
-}
-
-.qr-container img {
-  max-width: 220px;
-  border: 8px solid white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.hero {
-  position: relative;
-}
-.hero h1 {
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-}
-.menu-item {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.menu-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-
-.description {
-  color: #666;
-  font-size: 0.95rem;
-  margin: 0.5rem 0;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.price {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #6f4e37;
-}
-.main-header {
-  position: sticky;
-  top: 0;
-  background: #6f4e37;
-  color: white;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  padding: 1rem 0;
-}
-
-.main-header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.logo h1 {
-  margin: 0;
-  font-size: 1.8rem;
-}
-
-nav a, nav button {
-  color: white;
-  margin-left: 1.5rem;
-  font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-nav button:hover, nav a:hover {
-  color: #ffe4c4;
+footer {
+  margin-top: 4rem;
 }

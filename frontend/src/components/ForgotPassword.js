@@ -14,27 +14,31 @@ const ForgotPassword = () => {
       setMessage(data.message);
       setError('');
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError('Something went wrong');
     }
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
+    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', background: 'white', borderRadius: '12px' }}>
+      <h2>Forgot Password</h2>
       <p>Enter your email to receive a reset link.</p>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Your email address"
+          placeholder="Your email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <button type="submit">Send Reset Link</button>
+        <button type="submit" style={{ width: '100%', marginTop: '1rem' }}>
+          Send Reset Link
+        </button>
       </form>
-      <p><Link to="/login">Back to Login</Link></p>
+      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+        <Link to="/login">Back to Login</Link>
+      </p>
     </div>
   );
 };

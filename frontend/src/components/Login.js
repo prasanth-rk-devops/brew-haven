@@ -17,6 +17,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
     try {
       const { data } = await axios.post('/api/auth/login', { email, password });
 
@@ -27,6 +29,7 @@ const Login = () => {
       }
 
       dispatch(setCredentials({ token: data.token, user: data.user }));
+      localStorage.setItem('token', data.token);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -38,7 +41,7 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', background: 'white', borderRadius: '12px' }}>
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -56,9 +59,11 @@ const Login = () => {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit" style={{ width: '100%', marginTop: '1rem' }}>
+          Login
+        </button>
       </form>
-      <p>
+      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
         <Link to="/forgot-password">Forgot Password?</Link><br />
         Don't have an account? <Link to="/register">Register</Link>
       </p>

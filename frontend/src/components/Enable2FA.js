@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 const Enable2FA = () => {
   const [qrCode, setQrCode] = useState('');
   const [secret, setSecret] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
+  const [code, setCode] = useState('');
   const [backupCodes, setBackupCodes] = useState([]);
   const [step, setStep] = useState('start');
   const [error, setError] = useState('');
@@ -18,15 +18,13 @@ const Enable2FA = () => {
       setSecret(data.secret);
       setStep('scan');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to start 2FA setup');
+      setError(err.response?.data?.message || 'Failed to start 2FA');
     }
   };
 
-  const verifyCode = async () => {
+  const verify = async () => {
     try {
-      const { data } = await axios.post('/api/auth/2fa/verify-setup', {
-        token: verificationCode.trim()
-      }, {
+      const { data } = await axios.post('/api/auth/2fa/verify-setup', { token: code }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setBackupCodes(data.backupCodes);
@@ -37,46 +35,45 @@ const Enable2FA = () => {
   };
 
   return (
-    <div>
-      <h2>Enable Two-Factor Authentication</h2>
+    <div style={{ maxWidth: '500px', margin: '4rem auto', padding: '2rem', background: 'white', borderRadius: '12px' }}>
+      <h2>Enable 2FA</h2>
 
       {step === 'start' && (
-        <>
-          <p>Adding 2FA makes your account much more secure.</p>
-          <button onClick={startSetup}>Start Setup</button>
-        </>
+        <button onClick={startSetup} style={{ width: '100%' }}>
+          Start 2FA Setup
+        </button>
       )}
 
       {step === 'scan' && (
-        <div className="qr-container">
-          <h3>Scan this QR code with your authenticator app</h3>
-          {qrCode && <img src={qrCode} alt="2FA QR Code" />}
-          <p>Or manually enter this key: <strong>{secret}</strong></p>
-          <p>After scanning, enter the 6-digit code shown in your app:</p>
+        <div style={{ textAlign: 'center' }}>
+          <h3>Scan this QR code</h3>
+          {qrCode && <img src={qrCode} alt="2FA QR" style={{ maxWidth: '250px' }} />}
+          <p>Or enter manually: <strong>{secret}</strong></p>
           <input
             type="text"
             maxLength={6}
-            value={verificationCode}
-            onChange={e => setVerificationCode(e.target.value)}
-            placeholder="123456"
+            placeholder="Enter code"
+            value={code}
+            onChange={e => setCode(e.target.value)}
           />
-          <button onClick={verifyCode}>Verify</button>
+          <button onClick={verify} style={{ width: '100%', marginTop: '1rem' }}>
+            Verify
+          </button>
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
       )}
 
       {step === 'done' && (
         <div>
-          <h3>2FA Enabled Successfully!</h3>
-          <p>Save these backup codes in a safe place (you'll only see them once):</p>
+          <h3>2FA Enabled!</h3>
+          <p>Save these backup codes (shown only once):</p>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {backupCodes.map((code, i) => (
-              <li key={i} style={{ fontFamily: 'monospace', margin: '8px 0' }}>
+              <li key={i} style={{ fontFamily: 'monospace', margin: '0.5rem 0' }}>
                 {code}
               </li>
             ))}
           </ul>
-          <p>These codes can be used if you lose access to your authenticator app.</p>
         </div>
       )}
     </div>

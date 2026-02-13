@@ -18,6 +18,7 @@ const Register = () => {
     try {
       const { data } = await axios.post('/api/auth/register', { name, email, password });
       dispatch(setCredentials({ token: data.token, user: data.user }));
+      localStorage.setItem('token', data.token);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -25,7 +26,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', background: 'white', borderRadius: '12px' }}>
       <h2>Register</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -50,9 +51,11 @@ const Register = () => {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Create Account</button>
+        <button type="submit" style={{ width: '100%', marginTop: '1rem' }}>
+          Create Account
+        </button>
       </form>
-      <p>
+      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
         Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
